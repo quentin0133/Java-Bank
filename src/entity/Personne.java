@@ -3,7 +3,9 @@
 // (powered by FernFlower decompiler)
 //
 
-package capitalisme;
+package entity;
+
+import bank.Compte;
 
 import java.io.Serializable;
 import java.util.List;

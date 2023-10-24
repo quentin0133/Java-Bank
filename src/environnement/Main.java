@@ -1,4 +1,6 @@
-import capitalisme.Personne;
+package environnement;
+
+import entity.Personne;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -8,14 +10,13 @@ import java.util.function.BiConsumer;
 
 public class Main {
     private static Personne personne = new Personne(50.0F, new ArrayList());
-    private static final Map<String, BiConsumer<Float, Integer>> listAction = Map.of("Déposer de l'argent", (argent, idCompte) -> {
-        personne.deposerArgent(argent, idCompte);
-    }, "Retirer de l'argent", (argent, idCompte) -> {
-        personne.retirerArgent(argent, idCompte);
-    }, "Virer de l'argent", (argent, idCompte) -> {
-        personne.virerArgent(argent, idCompte, 0);
-    });
-    private static final String[] listActionLabel;
+    private static final Map<String, BiConsumer<Float, Integer>> listAction = Map.of(
+            "Déposer de l'argent", (argent, idCompte) -> personne.deposerArgent(argent, idCompte),
+            "Retirer de l'argent", (argent, idCompte) -> personne.retirerArgent(argent, idCompte),
+            "Virer de l'argent",(argent, idCompte) -> personne.virerArgent(argent, idCompte, 0));
+    private static final String[] listActionsLabel = listAction.keySet().toArray(new String[0]);
+
+    public enum ActionResult { Quit, Continue, Error }
 
     public static void main(String[] args) {
         personne.addCompte();
@@ -25,28 +26,24 @@ public class Main {
     private static void displayActionMenu() {
         System.out.println("Veuillez choisir une action :");
 
-        for(int i = 0; i < listActionLabel.length; ++i) {
-            System.out.printf(" %d\t->\t%s\n", i, listActionLabel[i]);
-        }
+        for(int i = 0; i < listActionsLabel.length; ++i)
+            System.out.printf(" %d\t->\t%s%n", i, listActionsLabel[i]);
 
         System.out.println("-1\t->\t Quitter");
         startBankLife(getSaisieInt());
     }
 
     private static void startBankLife(int idAction) {
-        if (idAction != -1) {
-            try {
-                displayComptes();
-                int idCompte = getSaisieInt();
-                System.out.println("Veuillez saisir l'argent :");
-                float argent = getSaisieFloat();
-                ((BiConsumer)listAction.get(listActionLabel[idAction])).accept(argent, idCompte);
-            } catch (ArrayIndexOutOfBoundsException var6) {
-                System.err.println("L'index saisi ne corresponds à aucun programme");
-            } finally {
-                displayActionMenu();
-            }
-
+        try {
+            displayComptes();
+            int idCompte = getSaisieInt();
+            System.out.println("Veuillez saisir l'argent :");
+            float argent = getSaisieFloat();
+            listAction.get(listActionsLabel[idAction]).accept(argent, idCompte);
+        } catch (ArrayIndexOutOfBoundsException var6) {
+            System.err.println("L'index saisi ne corresponds à aucun programme");
+        } finally {
+            displayActionMenu();
         }
     }
 
@@ -57,6 +54,14 @@ public class Main {
             System.out.printf(" %d\t->\t%s\n", i, personne.getComptes().get(i));
         }
 
+    }
+
+    private ActionResult checkAction(int saisie, int bounds) {
+        if (saisie == -1)
+            return ActionResult.Quit;
+        if (saisie <= bounds && saisie >= 0)
+            return ActionResult.Continue;
+        return ActionResult.Error;
     }
 
     public static int getSaisieInt() {
@@ -85,9 +90,5 @@ public class Main {
         }
 
         return saisie;
-    }
-
-    static {
-        listActionLabel = (String[])listAction.keySet().toArray(new String[0]);
     }
 }
