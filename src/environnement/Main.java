@@ -1,94 +1,46 @@
 package environnement;
 
-import entity.Personne;
+import bank.Account;
+import entity.Person;
+import entity.User;
+import menu.DepositMoneyCommand;
+import menu.WithdrawMoneyCommand;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
-import java.util.function.BiConsumer;
 
 public class Main {
-    private static Personne personne = new Personne(50.0F, new ArrayList());
-    private static final Map<String, BiConsumer<Float, Integer>> listAction = Map.of(
-            "Déposer de l'argent", (argent, idCompte) -> personne.deposerArgent(argent, idCompte),
-            "Retirer de l'argent", (argent, idCompte) -> personne.retirerArgent(argent, idCompte),
-            "Virer de l'argent",(argent, idCompte) -> personne.virerArgent(argent, idCompte, 0));
-    private static final String[] listActionsLabel = listAction.keySet().toArray(new String[0]);
-
-    public enum ActionResult { Quit, Continue, Error }
-
     public static void main(String[] args) {
-        personne.addCompte();
-        displayActionMenu();
-    }
+        Person michel = new Person(50f);
 
-    private static void displayActionMenu() {
-        System.out.println("Veuillez choisir une action :");
+        michel.createAccount();
 
-        for(int i = 0; i < listActionsLabel.length; ++i)
-            System.out.printf(" %d\t->\t%s%n", i, listActionsLabel[i]);
-
-        System.out.println("-1\t->\t Quitter");
-        startBankLife(getSaisieInt());
-    }
-
-    private static void startBankLife(int idAction) {
-        try {
-            displayComptes();
-            int idCompte = getSaisieInt();
-            System.out.println("Veuillez saisir l'argent :");
-            float argent = getSaisieFloat();
-            listAction.get(listActionsLabel[idAction]).accept(argent, idCompte);
-        } catch (ArrayIndexOutOfBoundsException var6) {
-            System.err.println("L'index saisi ne corresponds à aucun programme");
-        } finally {
-            displayActionMenu();
-        }
-    }
-
-    private static void displayComptes() {
-        System.out.printf("Veuillez saisir le compte :");
-
-        for(int i = 0; i < personne.getComptes().size(); ++i) {
-            System.out.printf(" %d\t->\t%s\n", i, personne.getComptes().get(i));
-        }
-
-    }
-
-    private ActionResult checkAction(int saisie, int bounds) {
-        if (saisie == -1)
-            return ActionResult.Quit;
-        if (saisie <= bounds && saisie >= 0)
-            return ActionResult.Continue;
-        return ActionResult.Error;
-    }
-
-    public static int getSaisieInt() {
         Scanner scanner = new Scanner(System.in);
 
-        int saisie;
-        try {
-            saisie = scanner.nextInt();
-        } catch (InputMismatchException var3) {
-            System.err.println("La saisie est invalide, veuillez réessayer");
-            saisie = getSaisieInt();
+        while (true) {
+            System.out.println("Choisissez une action :");
+            System.out.println("1 - Déposer de l'argent");
+            System.out.println("2 - Retirer de l'argent");
+            System.out.println("0 - Quitter");
+
+            int choix = User.getSaisieInt(3);
+
+            if (choix == 0) {
+                break;
+            } else if (choix == 1 || choix == 2) {
+                switch (choix) {
+                    case 1 -> michel.makeAction(new DepositMoneyCommand());
+                    case 2 -> michel.makeAction(new WithdrawMoneyCommand());
+                }
+            } else {
+                System.out.println("Choix invalide. Veuillez sélectionner une option valide.");
+            }
         }
 
-        return saisie;
-    }
+        List<Account> comptes = michel.getComptes();
+        for (int i = 0; i < comptes.size(); i++)
+            System.out.printf(comptes.get(i).toString());
 
-    public static float getSaisieFloat() {
-        Scanner scanner = new Scanner(System.in);
-
-        float saisie;
-        try {
-            saisie = scanner.nextFloat();
-        } catch (InputMismatchException var3) {
-            System.err.println("La saisie est invalide, veuillez réessayer");
-            saisie = getSaisieFloat();
-        }
-
-        return saisie;
+        scanner.close();
     }
 }
