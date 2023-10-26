@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package bank;
 
 import java.io.Serializable;
@@ -45,12 +40,8 @@ public class Account implements Serializable {
         this.code = code;
     }
 
-    public String toString() {
-        return "Compte n°%d : %.2f €".formatted(this.id, this.money);
-    }
-
     /**
-     * @param money argent à ajouter sur le compte
+     * @param money money to be deposed on the account
      */
     public void depositMoney(float money) {
         // if (!checkSecretCode(personne)) return;
@@ -63,17 +54,16 @@ public class Account implements Serializable {
      * @param money money to be withdrawn from accoubt
      * @return Retourne si l'opération a été réussi
      */
-    public boolean withdrawMoney(float money) {
-        // if (!checkSecretCode(personne)) return;
-
-        if (this.hasArgent(money)) {
-            money -= money;
-        }
-
-        return this.hasArgent(money);
+    public void withdrawMoney(float money) {
+        this.money -= money;
     }
 
-    private boolean hasArgent(float argent) {
+    private boolean hasMoney(float argent) {
         return this.money >= argent;
+    }
+
+    @Override
+    public String toString() {
+        return "Account n°%d : %.2f $".formatted(id, money);
     }
 }

@@ -1,12 +1,6 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package entity;
 
 import bank.Account;
-import menu.Command;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,21 +9,32 @@ import java.util.Random;
 
 public class Person implements Serializable {
     private List<Account> accounts = new ArrayList<>();
-    private float argent;
+    private String name;
+    private float money;
 
-    public Person() {
+    public Person(String name) {
+        this.name = name;
     }
 
-    public Person(float argent) {
-        this.argent = argent;
+    public Person(String name, float money) {
+        this.name = name;
+        this.money = money;
     }
 
-    public List<Account> getComptes() {
+    public List<Account> getAccounts() {
         return this.accounts;
     }
 
-    public float getArgent() {
-        return argent;
+    public float getMoney() {
+        return money;
+    }
+
+    public void setMoney(float money) {
+        this.money = money;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void createAccount() {
@@ -39,7 +44,14 @@ public class Person implements Serializable {
         System.err.printf("Code pour le compte n°%d : %s%n", newAccount.getId(), code);
     }
 
-    public void makeAction(Command command) {
-        command.optionAction(this);
+    @Override
+    public String toString() {
+        return "%s has %.2f $".formatted(name, money);
+    }
+
+    public String recap() {
+        StringBuilder result = new StringBuilder(toString()).append("\nHis accounts :\n");
+        accounts.forEach(result::append);
+        return result.toString();
     }
 }

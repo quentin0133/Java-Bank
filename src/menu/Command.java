@@ -1,7 +1,7 @@
 package menu;
 
-import entity.Person;
+import entity.User;
 
 public interface Command {
-    void optionAction(Person person);
+    void optionAction(User user);
 }
