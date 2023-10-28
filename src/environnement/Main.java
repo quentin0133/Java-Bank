@@ -1,42 +1,58 @@
 package environnement;
 
-import entity.Person;
-import entity.User;
-import menu.Command;
-import menu.DepositMoneyCommand;
-import menu.WithdrawMoneyCommand;
+import entities.Person;
+import menus.LifeMenu;
+import menus.Menu;
+import menus.commands.Command;
 
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    private static List<Command> accountCommands = List.of(
-            new DepositMoneyCommand(),
-            new WithdrawMoneyCommand()
-    );
+    private static final int QUIT = -1;
 
     public static void main(String[] args) {
-        User user = new User();
+        Menu currentMenu = new LifeMenu();
 
-        Person person1 = new Person("Michel", 50f);
+        Person person1 = new Person("Michael", 50f);
         person1.createAccount();
 
-        user.setCurrentPersonControlled(person1);
+        Person currentPerson = person1;
 
         while (true) {
-            System.out.println("Choisissez une action :");
-            for (int i = 0; i < accountCommands.size(); i++)
-                System.out.printf("%d - %s%n", i, accountCommands.get(i));
-            System.out.println("-1 - Quitter");
-
-            int entry = user.checkBoundInt(-1, 4, user::getSaisieInt, "Error, select an valid option").get();
-
-            if (entry == -1) {
-                break;
-            } else {
-                user.makeAction(accountCommands.get(entry));
-            }
+            var commands = currentMenu.getCommands();
+            int entry = startMenu(currentPerson, commands);
+            if (entry == QUIT) break;
+            currentMenu = commands.get(entry).getNextMenu();
         }
 
         System.out.println(person1.recap());
+    }
+
+    private static int startMenu(Person person, List<Command> listCommand) {
+        displayMenuAction(listCommand);
+        Scanner scanner = new Scanner(System.in);
+        try {
+            int entry = scanner.nextInt();
+            if (entry == QUIT) return QUIT;
+            person.makeAction(listCommand.get(entry));
+            return entry;
+        }
+        catch (InputMismatchException e) {
+            System.out.println("Error, enter an number");
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error, select an valid option");
+        }
+        return startMenu(person, listCommand);
+    }
+
+    private static void displayMenuAction(List<Command> accountCommands) {
+        StringBuilder menuAction = new StringBuilder();
+        for (int i = 0; i < accountCommands.size(); i++)
+            menuAction.append(i).append(" - ").append(accountCommands.get(i)).append('\n');
+        menuAction.append("-1 - Quit\n").append("Choose an action : ");
+        System.out.print(menuAction);
     }
 }

@@ -3,7 +3,7 @@ package bank;
 import java.io.Serializable;
 
 public class Account implements Serializable {
-    private static int staticId = 0;
+    private static int staticId = 1;
 
     private float money;
     private String code;
@@ -40,26 +40,14 @@ public class Account implements Serializable {
         this.code = code;
     }
 
-    /**
-     * @param money money to be deposed on the account
-     */
     public void depositMoney(float money) {
         // if (!checkSecretCode(personne)) return;
-
         this.money += money;
     }
 
-
-    /**
-     * @param money money to be withdrawn from accoubt
-     * @return Retourne si l'opération a été réussi
-     */
     public void withdrawMoney(float money) {
+        // if (!checkSecretCode(personne)) return;
         this.money -= money;
-    }
-
-    private boolean hasMoney(float argent) {
-        return this.money >= argent;
     }
 
     @Override

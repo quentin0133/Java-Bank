@@ -1,6 +1,7 @@
-package entity;
+package entities;
 
 import bank.Account;
+import menus.commands.Command;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Person implements Serializable {
     private List<Account> accounts = new ArrayList<>();
     private String name;
     private float money;
+    //private float salary;
 
     public Person(String name) {
         this.name = name;
@@ -39,19 +41,23 @@ public class Person implements Serializable {
 
     public void createAccount() {
         String code = String.format("%04d", new Random().nextInt(0, 10000));
-        Account newAccount = new Account(0.0F, code);
+        Account newAccount = new Account(0.0f, code);
         this.accounts.add(newAccount);
-        System.err.printf("Code pour le compte n°%d : %s%n", newAccount.getId(), code);
+        System.err.printf("The code for the account n°%03d : %s%n", newAccount.getId(), code);
     }
 
-    @Override
-    public String toString() {
-        return "%s has %.2f $".formatted(name, money);
+    public void makeAction(Command command) {
+        command.optionAction(this);
     }
 
     public String recap() {
         StringBuilder result = new StringBuilder(toString()).append("\nHis accounts :\n");
         accounts.forEach(result::append);
         return result.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "%s has %.2f $".formatted(name, money);
     }
 }
