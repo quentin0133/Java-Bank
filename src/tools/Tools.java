@@ -1,2 +1,4 @@
-package tools;public class tools {
+package tools;
+
+public class Tools {
 }

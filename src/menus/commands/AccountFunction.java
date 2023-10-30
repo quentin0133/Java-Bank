@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public interface AccountFunction {
-    default void displayAccountEntry(Person person) {
+/*    default void displayAccountEntry(Person person) {
         StringBuilder result = new StringBuilder();
         List<Account> accounts = person.getAccounts();
         for (int i = 0; i < accounts.size(); i++)
@@ -54,5 +54,5 @@ public interface AccountFunction {
             System.out.println("Error, enter an number");
         }
         return getMoneyEntry(person, maxEntry);
-    }
+    }*/
 }

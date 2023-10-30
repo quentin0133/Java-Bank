@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Person implements Serializable {
-    private List<Account> accounts = new ArrayList<>();
     private String name;
     private float money;
     //private float salary;
@@ -20,10 +19,6 @@ public class Person implements Serializable {
     public Person(String name, float money) {
         this.name = name;
         this.money = money;
-    }
-
-    public List<Account> getAccounts() {
-        return this.accounts;
     }
 
     public float getMoney() {
@@ -41,7 +36,6 @@ public class Person implements Serializable {
     public void createAccount() {
         String code = String.format("%04d", new Random().nextInt(0, 10000));
         Account newAccount = new Account(0.0f, code);
-        this.accounts.add(newAccount);
         System.err.printf("The code for the account n°%03d : %s%n", newAccount.getId(), code);
     }
 
@@ -51,7 +45,6 @@ public class Person implements Serializable {
 
     public String recap() {
         StringBuilder result = new StringBuilder(toString()).append("\nHis accounts :\n");
-        accounts.forEach(result::append);
         return result.toString();
     }
 
