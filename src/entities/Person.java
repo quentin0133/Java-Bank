@@ -1,6 +1,5 @@
 package entities;
 
-import bank.Account;
 import menus.commands.Command;
 
 import java.io.Serializable;

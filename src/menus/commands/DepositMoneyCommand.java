@@ -1,6 +1,6 @@
 package menus.commands;
 
-import bank.Account;
+import entities.Account;
 import entities.Person;
 import menus.LifeMenu;
 import menus.Menu;
