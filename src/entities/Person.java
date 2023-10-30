@@ -48,6 +48,14 @@ public class Person implements Serializable {
         return result.toString();
     }
 
+    public void displayMoneyEntry(Account account, String action) {
+        System.out.print(new StringBuilder(toString())
+                .append('\n')
+                .append(account)
+                .append('\n')
+                .append("Choose the amount you want to %s : ".formatted(action)));
+    }
+
     @Override
     public String toString() {
         return "%s has %.2f $".formatted(name, money);
