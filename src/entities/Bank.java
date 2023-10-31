@@ -7,15 +7,16 @@ import java.util.List;
 
 public class Bank {
     private List<Account> accounts = new ArrayList<>();
+    private Person person;
 
     // Connect person
-    public void receiveClient() {
-
+    public void receiveClient(Person person) {
+        this.person = person;
     }
 
     // Disconnect person
     public void dischargeClient() {
-
+        this.person = null;
     }
 
     // deposit
