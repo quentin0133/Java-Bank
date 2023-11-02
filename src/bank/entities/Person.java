@@ -1,10 +1,6 @@
-package entities;
-
-import menus.commands.Command;
+package bank.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Person implements Serializable {
@@ -37,15 +33,6 @@ public class Person implements Serializable {
         String code = String.format("%04d", new Random().nextInt(0, 10000));
         Account newAccount = new Account(0.0f, code);
         System.err.printf("The code for the account n°%03d : %s%n", newAccount.getId(), code);
-    }
-
-    public void makeAction(Command command) {
-        command.optionAction(this);
-    }
-
-    public String recap() {
-        StringBuilder result = new StringBuilder(toString()).append("\nHis accounts :\n");
-        return result.toString();
     }
 
     public void displayMoneyEntry(Account account, String action) {

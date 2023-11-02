@@ -1,17 +1,23 @@
-package entities;
+package bank.service;
 
+import bank.entities.Account;
+import bank.entities.Person;
 import tools.Tools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Bank {
-    private List<Account> accounts = new ArrayList<>();
-    private Person person;
+public class BankService {
+    private static final Map<Person, List<Account>> mapPersonToAccounts = new HashMap<>();
+    private static List<Account> accountsPerson = new ArrayList<>();
+    private static Person person;
 
     // Connect person
     public void receiveClient(Person person) {
         this.person = person;
+        this.accountsPerson = mapPersonToAccounts.get(person);
     }
 
     // Disconnect person
@@ -20,10 +26,10 @@ public class Bank {
     }
 
     // deposit
-    public void deposit(Person person) {
-        displayAccountEntry(person);
-        int accountEntry = Tools.getAccountEntry(accounts.size(), person);
-        Account account = accounts.get(accountEntry);
+    public static void deposit() {
+        displayAccountEntry();
+        int accountEntry = Tools.getAccountEntry(accountsPerson.size(), person);
+        Account account = accountsPerson.get(accountEntry);
 
         person.displayMoneyEntry(account, "deposit");
         float moneyEntry = Tools.getMoneyEntry(person, person.getMoney());
@@ -40,10 +46,10 @@ public class Bank {
     }
 
     // withdraw
-    public void withdraw(Person person) {
-        displayAccountEntry(person);
-        int accountEntry = Tools.getAccountEntry(accounts.size(), person);
-        Account account = accounts.get(accountEntry);
+    public static void withdraw() {
+        displayAccountEntry();
+        int accountEntry = Tools.getAccountEntry(accountsPerson.size(), person);
+        Account account = accountsPerson.get(accountEntry);
 
         person.displayMoneyEntry(account, "withdraw");
         float moneyEntry = Tools.getMoneyEntry(person, person.getMoney());
@@ -59,10 +65,10 @@ public class Bank {
         );
     }
 
-    private void displayAccountEntry(Person person) {
+    private static void displayAccountEntry() {
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < accounts.size(); i++)
-            result.append(i).append(" - ").append(accounts.get(i)).append('\n');
+        for (int i = 0; i < accountsPerson.size(); i++)
+            result.append(i).append(" - ").append(accountsPerson.get(i)).append('\n');
         result.append("Choose an account : ");
         System.out.print(result);
     }

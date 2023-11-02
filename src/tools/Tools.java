@@ -1,6 +1,6 @@
 package tools;
 
-import entities.Person;
+import bank.entities.Person;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;

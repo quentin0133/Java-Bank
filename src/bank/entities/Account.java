@@ -1,4 +1,4 @@
-package entities;
+package bank.entities;
 
 import java.io.Serializable;
 
